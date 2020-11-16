@@ -28,7 +28,34 @@ class management{
     public:
     void delay_alt();
     void record();
+    void add();
 };
+void management::add(){
+    int dda,mma;
+    cout<<"enter date and month: ";
+    cin>>dda>>mma;
+    string sa;
+    stringstream qs;
+    int i=6;
+    while(1){
+    i++;
+    qs<<dda<<"/"<<mma<<"-"<<i;
+    qs>>sa;
+    if(check_flight(sa)==1){
+        break;
+    }
+    }
+    string yu,uy,tyu;
+    cout<<"enter takeoff point and landing point: ";
+    cin>>yu>>uy;
+    cout<<"enter time of departure: ";
+    cin>>tyu;
+    fstream qyu;
+    qyu.open("schu_data.txt",ios::app);
+    qyu<<sa<<endl<<yu<<" to "<<uy<<endl<<tyu<<endl;
+    cout<<"new flight added successfully. flight number:-"<<sa<<endl;
+    qyu.close();
+}
 void management::delay_alt(){
 
     string msg;
@@ -45,8 +72,8 @@ void management::delay_alt(){
         getline(cin,msg);
     }
     fstream vb;
-    vb.open("alert.txt");
-    vb<<no<<endl<<msg<<endl<<endl;   
+    vb.open("alert.txt",ios::app);
+    vb<<no<<endl<<msg<<endl;   
     vb.close(); 
 }
 void management::record(){
@@ -159,7 +186,7 @@ void controls::book(){
         }
         fstream f;
         f.open("data.txt",ios::app);
-        f<<n<<endl<<name<<endl<<age<<endl<<endl;
+        f<<n<<endl<<name<<endl<<age<<endl;
         f.close();
         cout<<"Ticket booked successfully";
 
@@ -297,11 +324,12 @@ int main(){
     management a1;
     controls a2;
     while(a!=6){
+    tgby:
     cout<<"MENU\n1.managmental controls\n2.book ticket\n3.flight details\n4.flight schudule for this month\n5.alerts\n6.exit\n\n";
     cin>>a;
     switch(a){
         case 1:
-        cout<<"MENU:\n1.adding delay alert\n2.showing records\n\n";
+        cout<<"MENU:\n1.adding delay alert\n2.showing records\n3.add flight\n4.go to main menu\n\n";
         cin>>b;
         switch(b){
             case 1:
@@ -309,6 +337,12 @@ int main(){
             break;
             case 2:
             a1.record();
+            break;
+            case 3:
+            a1.add();
+            break;
+            case 4:
+            goto tgby;
             break;
             default:
             cout<<"entre correct choice\n";
