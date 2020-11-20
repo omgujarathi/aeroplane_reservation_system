@@ -331,11 +331,16 @@ void controls::details()
             getline(file3,z);
             if(z==x){
                 fpl=1;
+                getline(file3,z);
                 break;
+            }
+            else{
+                getline(file3,z);
             }
         }
         else
         {
+            getline(file3,z);
             getline(file3,z);
         }
 
