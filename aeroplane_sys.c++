@@ -1,27 +1,36 @@
-#include<bits/stdc++.h>
+#include<fstream>
+#include<iostream>
+#include<sstream>
 using namespace std;
-int check_flight(string op){
-    fstream faa;
-    faa.open("schu_data.txt");
-    string qw;
-    int flag=0;
-    while(faa){
-        getline(faa,qw);
-        if(qw==op){
-            flag=1;
-            break;
-        }
-    }
-    if(flag==1){
-        return 0;
-    }
-    else
-    {
-        return 1;
-    }
-    
-    faa.close();
-}
+
+ int check_flight(string fno)    //flight no
+ {
+     fstream new_file;           //File to be opened with variable name new_file
+     new_file.open("schu_data.txt");
+     string data;
+     int flag=0;
+     while(new_file)
+     {
+         getline(new_file,data);
+         if(data==fno)         //Data == flight number
+         {
+             flag=1;
+             break;
+         }
+     }
+     if(flag==1)
+     {
+         return 0;
+     }
+     else
+     {
+         return 1;
+     }
+     new_file.close();
+ }
+
+//CLASS FOR ADMIN/MANAGEMENT
+
 class management{
     int n,m,j,k;
     string no,a,b;
@@ -30,102 +39,130 @@ class management{
     void record();
     void add();
 };
-void management::add(){
-    int dda,mma;
-    cout<<"enter date and month: ";
-    cin>>dda>>mma;
-    string sa;
-    stringstream qs;
+
+//definition outside class using SRO
+void management::add()
+{
+    int dd,mm;
+    cout<<"Enter date and month: ";
+    cin>>dd>>mm;
+    string sadd;            //string sadd declared
+    stringstream ssdata;        //stringstream ssdata declared
     int i=6;
-    while(1){
+    while(1)
+    {
     i++;
-    qs<<dda<<"/"<<mma<<"-"<<i;
-    qs>>sa;
-    if(check_flight(sa)==1){
+    ssdata<<dd<<"/"<<mm<<"-"<<i;       //Add a string to the stringstream object.
+    ssdata>>sadd;
+    if(check_flight(sadd)==1)
+    {
         break;
     }
     }
-    string yu,uy,tyu;
-    cout<<"enter takeoff point and landing point: ";
-    cin>>yu>>uy;
-    cout<<"enter time of departure: ";
-    cin>>tyu;
-    fstream qyu;
-    qyu.open("schu_data.txt",ios::app);
-    qyu<<sa<<endl<<yu<<" to "<<uy<<endl<<tyu<<endl;
-    cout<<"new flight added successfully. flight number:-"<<sa<<endl;
-    qyu.close();
+    string takeoff,land,timeofd;            //string decln 
+    cout<<"Enter takeoff point and landing point: ";
+    cin>>takeoff>>timeofd;
+    cout<<"Enter time of departure: ";
+    cin>>timeofd;
+    fstream add;
+    add.open("schu_data.txt",ios::app);
+    add<<sadd<<endl<<takeoff<<" to "<<land<<endl<<timeofd<<endl;
+    cout<<"New flight added successfully. flight number:- "<<sadd<<endl;
+    add.close();
 }
-void management::delay_alt(){
 
+//definition outside class using SRO
+void management::delay_alt()
+{
     string msg;
-    incrrr:
-    cout<<"enter flight number to add delay or any other alert";
+    loop:
+    cout<<"Enter flight number to add delay or any other alert";
     cin>>no;
     if(check_flight(no)==1){
-        cout<<"flight not found\n";
-        goto incrrr;
+        cout<<"Flight not found\n";
+        goto loop;
     }
     else{
-        cout<<"enter message\n";
+        cout<<"Enter message\n";
         cin.ignore();
         getline(cin,msg);
     }
-    fstream vb;
-    vb.open("alert.txt",ios::app);
-    vb<<no<<endl<<msg<<endl;   
-    vb.close(); 
+    fstream delay;
+    delay.open("Alert.txt",ios::app);
+    delay<<no<<endl<<msg<<endl;
+    delay.close();
 }
-void management::record(){
-    cout<<"\n1.search record by name\n2.search flight record\n\n";
+
+//definition outside class using SRO
+void management::record()
+{
+    cout<<"\n1.Search record by name\n2.Search flight record\n\n";
     cin>>n;
-    fstream qp,re;
-    string gv,vg,po,xzx;
+    fstream file1,file2;
+    string f_no1,name,age,f_no2;            //flight_no1, 2 declared
+    int flag=0,flag2=0;
     switch(n){
         case 1:
-        cout<<"enter name: ";
+        cout<<"Enter name: ";
         cin.ignore();
         getline(cin,a);
-        qp.open("data.txt");
-        while(qp){
-        getline(qp,gv);
-        getline(qp,vg);
-        if(vg==a){
-            cout<<"flight no:- "<<gv<<endl;
-            getline(qp,po);
-            cout<<"age:- "<<po<<endl<<endl;
+        file1.open("data.txt");
+        while(file1){
+        getline(file1,f_no1);
+        getline(file1,name);
+        if(name==a){
+            cout<<"Flight no:- "<<f_no1<<endl;
+            getline(file1,age);
+            cout<<"Age:- "<<age<<endl<<endl;
+            flag=1;
         }
         else
-            getline(qp,po);
+            getline(file1,age);
         }
-        qp.close();
+        if(flag=0){
+            cout<<"No record found \n";
+        }
+        file1.close();
         break;
         case 2:
-        cout<<"enter flight number: ";
-        cin>>xzx;
-        cout<<"names of passengers:- \n";
-        re.open("data.txt");
-        while(re){
-            getline(re,gv);
-            if(gv==xzx){
-            getline(re,vg);
-            cout<<"name:- "<<vg<<endl;
-            getline(re,po);
-            cout<<"age:- "<<po<<endl;
+        again:
+        cout<<"Enter flight number: ";
+        cin>>f_no2;
+        if(check_flight(f_no2)==1){
+            cout<<"flight not found\n";
+            goto again;
+        }
+        cout<<"Names of passengers:- \n";
+        file2.open("data.txt");
+        while(file2){
+            getline(file2,f_no1);
+            if(f_no1==f_no2){
+            getline(file2,name);
+            cout<<"Name:- "<<name<<endl;
+            getline(file2,age);
+            cout<<"Age:- "<<age<<endl;
+            flag2=1;
+
             }
             else{
-                getline(re,gv);
-                getline(re,gv);
+                getline(file2,f_no1);
+                getline(file2,f_no1);
             }
         }
-        re.close();
+        if(flag2==0){
+            cout<<"No record found\n";
+        }
+        file2.close();
         break;
         default:
-        cout<<"enter valid option\n\n";
+        cout<<"Enter valid option\n\n";
         }
 
 }
-class controls{
+
+//CLASS FOR CUSTOMER/CONTROLS
+class controls
+{
     int m,d,mm,dd,yy,age;
     string n,name;
     public:
@@ -135,236 +172,293 @@ class controls{
     void alert();
 };
 
+//definition outside class using SRO
 void controls::book(){
-        wrnof:
-        cout<<"enter flight number(see schedule for flight number) ";
+        loop3:
+        cout<<"Enter flight number(see schedule for flight number) ";
         cin>>n;
         cout<<"finding flight info...\n";
-        if(check_flight(n)==1){
-        cout<<"flight number not found\n ";
-        goto wrnof;
+        if(check_flight(n)==1)
+        {
+        cout<<"Flight number not found\n ";
+        goto loop3;
         }
         else{
-        cout<<"flight found...\n";
-        fstream jk;
-        jk.open("alert.txt");
-        string nm,nnm;
-        while(jk){
-        getline(jk,nm);
-        if(nm==n){
-        getline(jk,nnm);
-        cout<<nnm<<endl<<endl;
+        cout<<"Flight found...\n";
+        fstream book;
+        book.open("alert.txt");
+        string a,b;
+        while(book){
+        getline(book,a);
+        if(a==n)
+        {
+        getline(book,b);
+        cout<<b<<endl<<endl;
         }
-        else{
-            getline(jk,nm);
+        else
+        {
+            getline(book,a);
         }
     }
-        
-    jk.close();
-
-
-        fstream f1;
-        f1.open("data.txt");
-        string abc;    
+    book.close();
+        fstream book1;
+        book1.open("data.txt");
+        string abc;
         int count=0;
-        while (f1) { 
-            getline(f1, abc); 
+        while (book1) {
+            getline(book1, abc);
             if(abc==n){
                 count++;
-            } 
-        } 
-        f1.close();
+            }
+        }
+        book1.close();
         if(count>=10){
-            cout<<"all seats are booked\n";
+            cout<<"All seats are booked\n";
         }
         else{
             cout<<"Enter full name: ";
             cin.ignore();
             getline(cin, name);
-            cout<<"enter age: ";
+            cout<<"Enter age: ";
             cin>>age;
         }
-        fstream f;
-        f.open("data.txt",ios::app);
-        f<<n<<endl<<name<<endl<<age<<endl;
-        f.close();
+        fstream book2;
+        book2.open("data.txt",ios::app);
+        book2<<n<<endl<<name<<endl<<age<<endl;
+        book2.close();
         cout<<"Ticket booked successfully";
-
     }
 }
-void controls::schudule(){
-    incrrrrr:
-    cout<<"enter date in dd/mm/yy format: ";
+
+//definition outside class using SRO
+void controls::schudule()
+{
+    loop2:
+    cout<<"Enter date in dd/mm/yyyy format: ";
     cin >> dd;
     cin.get();
     cin >> mm;
     cin.get();
     cin >> yy;
-    if(dd>31 ||mm>12 ||yy!=2020){
-        cout<<"date incorrect"<<endl;
-        goto incrrrrr;
+    if(dd>31 ||mm>12 ||yy!=2020)
+    {
+        cout<<"Date incorrect"<<endl;
+        goto loop2;
     }
-    stringstream ss;  
-    ss<<dd<<"/"<<mm;  
-    string s;  
-    ss>>s;  
-    fstream fa;
-    string qqww,qqw;
-    fa.open("schu_data.txt");
-    while(fa){
-        getline(fa,qqww);
-        string str2 = qqww.substr (0,5);  
+    stringstream ss;            //variable ss
+    ss<<dd<<"/"<<mm;
+    string s;                   //variable s
+    ss>>s;
+    fstream schedule;
+    string flightno,details;
+    int sflag=0;
+    schedule.open("schu_data.txt");
+    while(schedule){
+        getline(schedule,flightno);
+        string str2 = flightno.substr(0,5);
         if(str2==s){
-            getline(fa,qqw);
-            cout<<"details:-"<<qqw<<endl;
-            getline(fa,qqw);
-            cout<<"time:- "<<qqw<<endl;
-            cout<<"flight number: "<<qqww<<endl<<endl;
+            getline(schedule,details);
+            cout<<"Details:-"<<details<<endl;
+            getline(schedule,details);
+            cout<<"Time:- "<<details<<endl;
+            cout<<"Flight number: "<<flightno<<endl<<endl;
+            sflag=1;
         }
         else{
-            getline(fa,qqw);
-            getline(fa,qqw);
+            getline(schedule,details);
+            getline(schedule,details);
         }
     }
-    fa.close();
+    if(sflag==0){
+        cout<<"No flight found for this data\n";
+    }
+    schedule.close();
 }
-void controls::details(){
-    cout<<"enter flight number: ";
-    string sono;
-    cin>>sono;
-    fstream jk;
-        jk.open("alert.txt");
+
+//definition outside class using SRO
+void controls::details()
+{
+    again1:
+    cout<<"Enter flight number: ";
+    string f_no;
+    cin>>f_no;
+    if(check_flight(f_no)==1){
+        cout<<"flight not found\n";
+        goto again1;
+    }
+    fstream file_d;
+        file_d.open("alert.txt");
         string nm,nnm;
-        while(jk){
-        getline(jk,nm);
-        if(nm==sono){
-        getline(jk,nnm);
+        while(file_d){
+        getline(file_d,nm);
+        if(nm==f_no){
+        getline(file_d,nnm);
         cout<<nnm<<endl<<endl;
         }
         else{
-            getline(jk,nm);
+            getline(file_d,nm);
         }
     }
-    jk.close();
-    fstream faaa;
-    faaa.open("schu_data.txt",ios::app);
-    string qw;
-    while(faaa){
-        getline(faaa,qw);
-        if(qw==sono){
-            getline(faaa,qw);
-            cout<<"details:-"<<qw<<endl;
-            getline(faaa,qw);
-            cout<<"time:- "<<qw<<endl<<endl;
+    file_d.close();
+    fstream file2;
+    file2.open("schu_data.txt");
+    string details_1;
+    while(file2){
+        getline(file2,details_1);
+        if(details_1==f_no){
+            getline(file2,details_1);
+            cout<<"Details:-"<<details_1<<endl;
+            getline(file2,details_1);
+            cout<<"Time:- "<<details_1<<endl<<endl;
             break;
         }
         else{
-            getline(faaa,qw);
-            getline(faaa,qw);
+            getline(file2,details_1);
+            getline(file2,details_1);
         }
     }
-    faaa.close();
-    cout<<"enter name to check status(for same flight)";
-    string pp,op,opp;
+    file2.close();
+    cout<<"Enter name to check status(for same flight)";
+    string x,y,z;
     cin.ignore();
-    getline(cin, pp);
-    fstream ll;
-    ll.open("data.txt");
+    getline(cin,x);
+    fstream file3;
+    file3.open("data.txt");
     int fpl=0;
-    while(ll){
-        getline(ll,op);
-        if(op==sono){
-            getline(ll,opp);
-            if(opp==pp){
+    while(file3){
+        getline(file3,y);
+        if(y==f_no){
+            getline(file3,z);
+            if(z==x){
                 fpl=1;
                 break;
             }
         }
-        else{
-            getline(ll,opp);
+        else
+        {
+            getline(file3,z);
         }
 
     }
     if(fpl==1){
-        cout<<"booking found\n";
+        cout<<"Booking found\n";
     }
     else
     {
-        cout<<"booking not found\n";
+        cout<<"Booking not found\n";
     }
-    ll.close();
+   file3.close();
     
 }
-void controls::alert(){
-    string cv,nm,nnm;
-    fstream jk;
-    int fgl=0;
-    jk.open("alert.txt");
-    cout<<"enter flight number to see alerts";
-    cin>>cv;
-    while(jk){
-        getline(jk,nm);
-        if(nm==cv){
-        fgl=1;
-        getline(jk,nnm);
-        cout<<nnm<<endl<<endl;
+
+//definition outside class using SRO
+void controls::alert()
+{
+    string text1,text2,text3;
+    fstream alert;
+    int flag1=0;
+    alert.open("alert.txt");
+    again2:
+    cout<<"Enter flight number to see alerts";
+    cin>>text1;
+    if(check_flight(text1)==1){
+        cout<<"flight not found\n";
+        goto again2;
+    }
+    while(alert)
+    {
+        getline(alert,text2);
+        if(text2==text1)
+        {
+        flag1=1;
+        getline(alert,text3);
+        cout<<text3<<endl<<endl;
         }
-        else{
-            getline(jk,nnm);
+        else
+        {
+            getline(alert,text3);
         }
     }
-    if(fgl==0){
-        cout<<"no alert message found for this flight\n";
+    if(flag1==0)
+    {
+        cout<<"No alert message found for this flight\n";
     }
-    jk.close();
+    alert.close();
 
 }
-int main(){
-    int a=0,b,c,d,e;
-    management a1;
-    controls a2;
-    while(a!=6){
-    tgby:
-    cout<<"MENU\n1.managmental controls\n2.book ticket\n3.flight details\n4.flight schudule for this month\n5.alerts\n6.exit\n\n";
-    cin>>a;
-    switch(a){
-        case 1:
-        cout<<"MENU:\n1.adding delay alert\n2.showing records\n3.add flight\n4.go to main menu\n\n";
-        cin>>b;
-        switch(b){
+
+
+//MAIN FUNCTION
+int main()
+{
+    int ch = 0,ch1 = 0,ch2=0;   //For Switch case
+    management m1;
+    controls c2;
+    loop1:
+    while(ch!=3)
+    {
+    cout<<"\n-----------\nMENU\n1.User\n2.Admin\n3.Exit\n";
+        cin>>ch;
+    switch(ch)
+        {
+        case 1:      //Menu - user
+            {
+            cout<<"\nUser-\n 1.Book tickets\n 2.Flight details \n 3.Flight Schedule \n 4.Alerts\n 5.Go To Main-Menu\n";
+            cin>>ch1;
+            switch(ch1)
+            {
             case 1:
-            a1.delay_alt();
-            break;
+                cout<<"Book Tickets\n";
+                c2.book();                  //booking tickects -USER
+                break;
             case 2:
-            a1.record();
-            break;
+                c2.details();    //flight details for user
+                break;
             case 3:
-            a1.add();
-            break;
+                c2.schudule();    //flight schedule
+                break;
             case 4:
-            goto tgby;
+                c2.alert();       //alert messages for users
+                break;
+            case 5:
+                goto loop1;
+                break;
+            }
             break;
-            default:
-            cout<<"entre correct choice\n";
-        }
-        break;
-        case 2:
-        a2.book();
-        break;
+            }
+                
+        case 2:      //Menu- admin
+            {
+            cout<<"Admin-\n 1.Adding delay alert\n 2.Showing records \n 3.Add flight \n 4.Go To Main-Menu\n";
+            cin>>ch2;
+            switch(ch2)
+            {
+                case 1:
+                    cout<<"Add Delay Alert\n";
+                    m1.delay_alt();
+                    break;
+                case 2:
+                    cout<<"Displaying Records\n";
+                    m1.record();
+                    break;
+                case 3:
+                    cout<<"Add Flight\n";
+                    m1.add();
+                    break;
+                case 4:
+                    goto loop1;
+                    break;
+                default:
+                cout<<"Entre Correct Choice\n";
+             }
+             break;
+             }
         case 3:
-        a2.details();
-        break;
-        case 4:
-        a2.schudule();
-        break;
-        case 5:
-        a2.alert();
-        break;
-        case 6:
-        exit(0);
-        default:
-        cout<<"enter correct choice\n";
-    }
-    }
+         cout<<"Thank You!\n";
+         break;
+}    //END OF SWITCH CASE
+    
+}    //END OF WHILE LOOP
     return 0;
-}
+}   //MAIN FUNCTION END
+ 
